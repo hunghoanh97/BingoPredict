@@ -1,0 +1,2 @@
+# BingoPredict
+Predict next bingo
