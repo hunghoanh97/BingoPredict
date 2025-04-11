@@ -1,0 +1,58 @@
+[
+  {
+    "StartTime": "2025-04-11T15:32:06.1092665+07:00",
+    "EndTime": "2025-04-11T15:32:06.1093228+07:00",
+    "TotalPredictions": 1,
+    "AccuratePredictions": 0,
+    "AccuracyRate": 0,
+    "Details": [
+      {
+        "Message": "Prediction was not accurate",
+        "LastPredictionTime": "2025-04-11T15:32:07.8704901+07:00",
+        "ActualSum": 10,
+        "PredictedRank": 11,
+        "IsAccurate": false,
+        "Predictions": [
+          {
+            "Sum": 11,
+            "Frequency": 12.487438000453853,
+            "AverageInterval": 8.01,
+            "TimeSinceLastAppearance": 18,
+            "Probability": 0.2809471016074602
+          },
+          {
+            "Sum": 10,
+            "Frequency": 12.419360067429572,
+            "AverageInterval": 8.05,
+            "TimeSinceLastAppearance": 9,
+            "Probability": 0.27923625061135504
+          },
+          {
+            "Sum": 13,
+            "Frequency": 9.780529711155056,
+            "AverageInterval": 10.22,
+            "TimeSinceLastAppearance": 11,
+            "Probability": 0.2147490342470054
+          },
+          {
+            "Sum": 9,
+            "Frequency": 11.563523195124324,
+            "AverageInterval": 8.65,
+            "TimeSinceLastAppearance": 5,
+            "Probability": 0.2035902465765521
+          },
+          {
+            "Sum": 12,
+            "Frequency": 11.66077738515901,
+            "AverageInterval": 8.58,
+            "TimeSinceLastAppearance": 3,
+            "Probability": 0.17575689513920775
+          }
+        ]
+      }
+    ],
+    "RemainingBalance": 999990,
+    "TotalWinnings": 0,
+    "PrizeWon": 0
+  }
+]

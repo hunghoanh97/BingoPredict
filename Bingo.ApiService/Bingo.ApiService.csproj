@@ -7,12 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Quartz" Version="3.14.0" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.14.0" />
     <ProjectReference Include="..\Bingo.ServiceDefaults\Bingo.ServiceDefaults.csproj" />
     <PackageReference Include="EPPlus" Version="7.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="PredictionResults\" />
   </ItemGroup>
 
 </Project>

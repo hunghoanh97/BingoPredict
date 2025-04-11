@@ -31,10 +31,10 @@ public class BingoService : IBingoService
         if (response == null)
             throw new Exception("No data available");
 
-        // Get the latest 10,000 draws
+        // Get the latest 50,000 draws
         var latestDraws = response.GbingoDraws
             .OrderByDescending(d => d.DrawAt)
-            .Take(10000)
+            .Take(50000)
             .ToList();
 
         // Calculate statistics from draws
@@ -193,10 +193,10 @@ public class BingoService : IBingoService
         if (response == null)
             throw new Exception("No data available");
 
-        // Get the latest 10,000 draws
+        // Get the latest 50,000 draws
         var latestDraws = response.GbingoDraws
             .OrderByDescending(d => d.DrawAt)
-            .Take(10000)
+            .Take(50000)
             .ToList();
 
         // Calculate sum statistics
@@ -286,10 +286,10 @@ public class BingoService : IBingoService
         var response = await client.GetFromJsonAsync<BingoData>(API_URL);
         if (response == null)
             throw new Exception("No data available");
-        // Get the latest 10,000 draws
+        // Get the latest 50,000 draws
         var latestDraws = response.GbingoDraws
             .OrderByDescending(d => d.DrawAt)
-            .Take(10000)
+            .Take(50000)
             .ToList();
         // Calculate sum statistics
         var sumStats = new Dictionary<int, int>();
