@@ -10,6 +10,7 @@ public interface IBingoService
     Task<byte[]> ExportBingoDataAsync();
     Task<PredictionResult> PredictNextSumAsync();
     Task<PredictionAccuracyResult> CheckPredictionAccuracyAsync();
+    Task<List<BingoDraw>> GetLatestResultsAsync(int count = 5);
 }
 
 public class BingoService : IBingoService
@@ -319,5 +320,18 @@ public class BingoService : IBingoService
             IsAccurate = isAccurate,
             Predictions = lastPrediction.Predictions
         };
+    }
+
+    public async Task<List<BingoDraw>> GetLatestResultsAsync(int count = 5)
+    {
+        var client = _httpClientFactory.CreateClient();
+        var response = await client.GetFromJsonAsync<BingoData>(API_URL);
+        if (response == null)
+            throw new Exception("No data available");
+
+        return response.GbingoDraws
+            .OrderByDescending(d => d.DrawAt)
+            .Take(count)
+            .ToList();
     }
 }

@@ -1,5 +1,6 @@
 using OfficeOpenXml;
 using Bingo.ApiService.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Bingo.ApiService;
 
@@ -18,6 +19,7 @@ public class Program
         builder.Services.AddHttpClient();
         builder.Services.AddScoped<IBingoService, BingoService>();
         builder.Services.AddHostedService<PredictionSummaryService>();
+        builder.Services.AddSingleton<PredictionSummaryService>();
 
         // Set EPPlus license context
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -55,20 +57,43 @@ public class Program
         });
 
         app.MapGet("/api/bingo/check-prediction", async (IBingoService bingoService) =>
-       {
-           try
-           {
-               var prediction = await bingoService.CheckPredictionAccuracyAsync();
-               return Results.Ok(prediction);
-           }
-           catch (Exception ex)
-           {
-               return Results.Problem(ex.Message);
-           }
-       });
+        {
+            try
+            {
+                var prediction = await bingoService.CheckPredictionAccuracyAsync();
+                return Results.Ok(prediction);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
 
+        app.MapGet("/api/bingo/latest-summaries", async ([FromServices] PredictionSummaryService summaryService) =>
+        {
+            try
+            {
+                var summaries = await summaryService.GetLatestSummariesAsync();
+                return Results.Ok(summaries);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
 
-
+        app.MapGet("/api/bingo/latest-results", async ([FromServices] IBingoService bingoService) =>
+        {
+            try
+            {
+                var results = await bingoService.GetLatestResultsAsync();
+                return Results.Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
 
         app.MapDefaultEndpoints();
 
