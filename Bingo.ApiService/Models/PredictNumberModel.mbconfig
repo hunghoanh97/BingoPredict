@@ -1,0 +1,259 @@
+﻿{
+  "Scenario": "Regression",
+  "DataSource": {
+    "Version": 3,
+    "EscapeCharacter": "\"",
+    "ReadMultiLines": false,
+    "KeepDiacritics": false,
+    "KeepPunctuations": false,
+    "AllowQuoting": false,
+    "Type": "TabularFile",
+    "FilePath": "C:\\Users\\hqhung4\\Downloads\\BingoData.csv",
+    "Delimiter": ",",
+    "DecimalMarker": ".",
+    "HasHeader": true,
+    "ColumnProperties": [
+      {
+        "ColumnName": "Draw Time",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "String",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "Winning Result",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "Sum",
+        "ColumnPurpose": "Label",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      }
+    ]
+  },
+  "Environment": {
+    "Type": "LocalCPU",
+    "Version": 1
+  },
+  "RunHistory": {
+    "Version": 3,
+    "Type": "Result",
+    "Trials": [
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "FastForestRegression",
+        "Score": 4.0737666234802461E-06,
+        "RuntimeInSeconds": 0.393,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e4",
+          "e0": {
+            "OutputColumnNames": [
+              "Winning Result"
+            ],
+            "InputColumnNames": [
+              "Winning Result"
+            ]
+          },
+          "e1": {
+            "InputColumnName": "Draw Time",
+            "OutputColumnName": "Draw Time"
+          },
+          "e2": {
+            "InputColumnNames": [
+              "Winning Result",
+              "Draw Time"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e4": {
+            "NumberOfTrees": 17,
+            "NumberOfLeaves": 5,
+            "FeatureFraction": 0.79728526,
+            "LabelColumnName": "Sum",
+            "FeatureColumnName": "Features"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "FastForestRegression",
+        "Score": 4.0737666234802461E-06,
+        "RuntimeInSeconds": 0.403,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e4",
+          "e0": {
+            "OutputColumnNames": [
+              "Winning Result"
+            ],
+            "InputColumnNames": [
+              "Winning Result"
+            ]
+          },
+          "e1": {
+            "InputColumnName": "Draw Time",
+            "OutputColumnName": "Draw Time"
+          },
+          "e2": {
+            "InputColumnNames": [
+              "Winning Result",
+              "Draw Time"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e4": {
+            "NumberOfTrees": 17,
+            "NumberOfLeaves": 5,
+            "FeatureFraction": 0.7985607,
+            "LabelColumnName": "Sum",
+            "FeatureColumnName": "Features"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "FastForestRegression",
+        "Score": 4.0737666234802461E-06,
+        "RuntimeInSeconds": 0.382,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e4",
+          "e0": {
+            "OutputColumnNames": [
+              "Winning Result"
+            ],
+            "InputColumnNames": [
+              "Winning Result"
+            ]
+          },
+          "e1": {
+            "InputColumnName": "Draw Time",
+            "OutputColumnName": "Draw Time"
+          },
+          "e2": {
+            "InputColumnNames": [
+              "Winning Result",
+              "Draw Time"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e4": {
+            "NumberOfTrees": 17,
+            "NumberOfLeaves": 5,
+            "FeatureFraction": 0.7973572,
+            "LabelColumnName": "Sum",
+            "FeatureColumnName": "Features"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "FastForestRegression",
+        "Score": 4.0737666234802461E-06,
+        "RuntimeInSeconds": 0.383,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e4",
+          "e0": {
+            "OutputColumnNames": [
+              "Winning Result"
+            ],
+            "InputColumnNames": [
+              "Winning Result"
+            ]
+          },
+          "e1": {
+            "InputColumnName": "Draw Time",
+            "OutputColumnName": "Draw Time"
+          },
+          "e2": {
+            "InputColumnNames": [
+              "Winning Result",
+              "Draw Time"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e4": {
+            "NumberOfTrees": 17,
+            "NumberOfLeaves": 4,
+            "FeatureFraction": 0.79764986,
+            "LabelColumnName": "Sum",
+            "FeatureColumnName": "Features"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "FastForestRegression",
+        "Score": 4.0737666234802461E-06,
+        "RuntimeInSeconds": 0.403,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e4",
+          "e0": {
+            "OutputColumnNames": [
+              "Winning Result"
+            ],
+            "InputColumnNames": [
+              "Winning Result"
+            ]
+          },
+          "e1": {
+            "InputColumnName": "Draw Time",
+            "OutputColumnName": "Draw Time"
+          },
+          "e2": {
+            "InputColumnNames": [
+              "Winning Result",
+              "Draw Time"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e4": {
+            "NumberOfTrees": 17,
+            "NumberOfLeaves": 4,
+            "FeatureFraction": 0.79755586,
+            "LabelColumnName": "Sum",
+            "FeatureColumnName": "Features"
+          }
+        }
+      }
+    ],
+    "Estimators": {
+      "e0": "ReplaceMissingValues",
+      "e1": "FeaturizeText",
+      "e2": "Concatenate",
+      "e3": "FastTreeRegression",
+      "e4": "FastForestRegression",
+      "e5": "LightGbmRegression",
+      "e6": "LbfgsPoissonRegressionRegression",
+      "e7": "SdcaRegression"
+    },
+    "Schema": "e0 * e1 * e2 * (e3 + e4 + e5 + e6 + e7)",
+    "MetricName": "RSquared",
+    "ModelFilePath": "D:\\.net\\Bingo\\Bingo.ApiService\\Models\\PredictNumberModel.mlnet"
+  },
+  "Type": "TrainingConfig",
+  "Version": 5,
+  "TrainingOption": {
+    "Version": 2,
+    "Subsampling": false,
+    "Type": "RegressionTrainingOption",
+    "TrainingTime": 60,
+    "LabelColumn": "Sum",
+    "ValidationOption": {
+      "Version": 0,
+      "Type": "TrainValidateSplitValidationOption",
+      "SplitRatio": 0.2
+    }
+  }
+}

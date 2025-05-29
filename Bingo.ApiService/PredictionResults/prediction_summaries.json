@@ -54,5 +54,100 @@
     "RemainingBalance": 999990,
     "TotalWinnings": 0,
     "PrizeWon": 0
+  },
+  {
+    "StartTime": "2025-05-29T13:55:36.4944118+07:00",
+    "EndTime": "2025-05-29T13:55:36.4944726+07:00",
+    "TotalPredictions": 2,
+    "AccuratePredictions": 0,
+    "AccuracyRate": 0,
+    "Details": [
+      {
+        "Message": "Prediction was not accurate",
+        "LastPredictionTime": "2025-05-29T13:55:37.9547711+07:00",
+        "ActualSum": 14,
+        "PredictedRank": 10,
+        "IsAccurate": false,
+        "Predictions": [
+          {
+            "Sum": 10,
+            "Frequency": 12.461326469594155,
+            "AverageInterval": 8.02,
+            "TimeSinceLastAppearance": 9,
+            "Probability": 0.2802850561348136
+          },
+          {
+            "Sum": 11,
+            "Frequency": 12.393729038296545,
+            "AverageInterval": 8.07,
+            "TimeSinceLastAppearance": 18,
+            "Probability": 0.2786074177048078
+          },
+          {
+            "Sum": 13,
+            "Frequency": 9.700231391207135,
+            "AverageInterval": 10.31,
+            "TimeSinceLastAppearance": 11,
+            "Probability": 0.2128282696258765
+          },
+          {
+            "Sum": 9,
+            "Frequency": 11.566960455502691,
+            "AverageInterval": 8.64,
+            "TimeSinceLastAppearance": 5,
+            "Probability": 0.2036951764573394
+          },
+          {
+            "Sum": 12,
+            "Frequency": 11.647557392819072,
+            "AverageInterval": 8.58,
+            "TimeSinceLastAppearance": 3,
+            "Probability": 0.17549628188142893
+          }
+        ]
+      }
+    ],
+    "RemainingBalance": 999980,
+    "TotalWinnings": 0,
+    "PrizeWon": 0
+  },
+  {
+    "StartTime": "2025-05-29T15:04:10.7806736+07:00",
+    "EndTime": "2025-05-29T15:04:10.7807168+07:00",
+    "TotalPredictions": 3,
+    "AccuratePredictions": 0,
+    "AccuracyRate": 0,
+    "Details": [],
+    "RemainingBalance": 999970,
+    "TotalWinnings": 0,
+    "PrizeWon": 0
+  },
+  {
+    "StartTime": "2025-05-29T15:14:11.4490267+07:00",
+    "EndTime": "2025-05-29T15:14:11.44907+07:00",
+    "TotalPredictions": 4,
+    "AccuratePredictions": 0,
+    "AccuracyRate": 0,
+    "Details": [
+      {
+        "Message": "Prediction was not accurate",
+        "LastPredictionTime": "2025-05-29T15:14:13.6253771+07:00",
+        "ActualSum": 5,
+        "PredictedRank": 10,
+        "IsAccurate": false,
+        "Predictions": [
+          {
+            "Sum": 10,
+            "Frequency": 12.46,
+            "AverageInterval": 8.02,
+            "TimeSinceLastAppearance": 1,
+            "Probability": 1
+          }
+        ]
+      }
+    ],
+    "RemainingBalance": 999960,
+    "TotalWinnings": 0,
+    "PrizeWon": 0
   }
 ]

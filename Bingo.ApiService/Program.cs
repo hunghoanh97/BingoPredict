@@ -99,6 +99,19 @@ public class Program
             }
         });
 
+        app.MapGet("/api/bingo/exportCsv", async (IBingoService bingoService) =>
+        {
+            try
+            {
+                var csvData = await bingoService.ExportBingoDataAsCsvAsync();
+                return Results.File(csvData, "text/csv", "BingoData.csv");
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
         app.MapGet("/api/bingo/predict", async (IBingoService bingoService) =>
         {
             try
