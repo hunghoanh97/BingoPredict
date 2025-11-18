@@ -149,5 +149,173 @@
     "RemainingBalance": 999960,
     "TotalWinnings": 0,
     "PrizeWon": 0
+  },
+  {
+    "StartTime": "2025-11-18T14:28:12.5120098+07:00",
+    "EndTime": "2025-11-18T14:28:12.5120375+07:00",
+    "TotalPredictions": 5,
+    "AccuratePredictions": 0,
+    "AccuracyRate": 0,
+    "Details": [
+      {
+        "Message": "Prediction was not accurate",
+        "LastPredictionTime": "2025-11-18T14:28:24.2213141+07:00",
+        "ActualSum": 17,
+        "PredictedRank": 11,
+        "IsAccurate": false,
+        "Predictions": [
+          {
+            "Sum": 11,
+            "Frequency": 12.33,
+            "AverageInterval": 8.11,
+            "TimeSinceLastAppearance": 5,
+            "Probability": 1
+          }
+        ]
+      }
+    ],
+    "RemainingBalance": 999950,
+    "TotalWinnings": 0,
+    "PrizeWon": 0
+  },
+  {
+    "StartTime": "2025-11-18T14:34:12.0891636+07:00",
+    "EndTime": "2025-11-18T14:34:12.0891643+07:00",
+    "TotalPredictions": 6,
+    "AccuratePredictions": 0,
+    "AccuracyRate": 0,
+    "Details": [
+      {
+        "Message": "Prediction was not accurate",
+        "LastPredictionTime": "2025-11-18T14:34:16.3950406+07:00",
+        "ActualSum": 13,
+        "PredictedRank": 11,
+        "IsAccurate": false,
+        "Predictions": [
+          {
+            "Sum": 11,
+            "Frequency": 12.33,
+            "AverageInterval": 8.11,
+            "TimeSinceLastAppearance": 6,
+            "Probability": 1
+          }
+        ]
+      }
+    ],
+    "RemainingBalance": 999940,
+    "TotalWinnings": 0,
+    "PrizeWon": 0
+  },
+  {
+    "StartTime": "2025-11-18T14:40:12.0875338+07:00",
+    "EndTime": "2025-11-18T14:40:12.0875342+07:00",
+    "TotalPredictions": 7,
+    "AccuratePredictions": 1,
+    "AccuracyRate": 14.285714285714285,
+    "Details": [
+      {
+        "Message": "Prediction was accurate",
+        "LastPredictionTime": "2025-11-18T14:40:20.0277132+07:00",
+        "ActualSum": 10,
+        "PredictedRank": 10,
+        "IsAccurate": true,
+        "Predictions": [
+          {
+            "Sum": 10,
+            "Frequency": 12.36,
+            "AverageInterval": 8.09,
+            "TimeSinceLastAppearance": 0,
+            "Probability": 1
+          }
+        ]
+      }
+    ],
+    "RemainingBalance": 999930,
+    "TotalWinnings": 44000,
+    "PrizeWon": 44000
+  },
+  {
+    "StartTime": "2025-11-18T14:46:12.0896935+07:00",
+    "EndTime": "2025-11-18T14:46:12.0896947+07:00",
+    "TotalPredictions": 8,
+    "AccuratePredictions": 1,
+    "AccuracyRate": 12.5,
+    "Details": [
+      {
+        "Message": "Prediction was not accurate",
+        "LastPredictionTime": "2025-11-18T14:46:17.6960348+07:00",
+        "ActualSum": 7,
+        "PredictedRank": 10,
+        "IsAccurate": false,
+        "Predictions": [
+          {
+            "Sum": 10,
+            "Frequency": 12.36,
+            "AverageInterval": 8.09,
+            "TimeSinceLastAppearance": 1,
+            "Probability": 1
+          }
+        ]
+      }
+    ],
+    "RemainingBalance": 1043920,
+    "TotalWinnings": 44000,
+    "PrizeWon": 0
+  },
+  {
+    "StartTime": "2025-11-18T14:52:12.0864728+07:00",
+    "EndTime": "2025-11-18T14:52:12.0864731+07:00",
+    "TotalPredictions": 9,
+    "AccuratePredictions": 1,
+    "AccuracyRate": 11.11111111111111,
+    "Details": [
+      {
+        "Message": "Prediction was not accurate",
+        "LastPredictionTime": "2025-11-18T14:52:28.5022781+07:00",
+        "ActualSum": 17,
+        "PredictedRank": 11,
+        "IsAccurate": false,
+        "Predictions": [
+          {
+            "Sum": 11,
+            "Frequency": 12.33,
+            "AverageInterval": 8.1,
+            "TimeSinceLastAppearance": 9,
+            "Probability": 1
+          }
+        ]
+      }
+    ],
+    "RemainingBalance": 1043910,
+    "TotalWinnings": 44000,
+    "PrizeWon": 0
+  },
+  {
+    "StartTime": "2025-11-18T14:58:12.089907+07:00",
+    "EndTime": "2025-11-18T14:58:12.0899074+07:00",
+    "TotalPredictions": 10,
+    "AccuratePredictions": 2,
+    "AccuracyRate": 20,
+    "Details": [
+      {
+        "Message": "Prediction was accurate",
+        "LastPredictionTime": "2025-11-18T14:58:18.3525555+07:00",
+        "ActualSum": 11,
+        "PredictedRank": 11,
+        "IsAccurate": true,
+        "Predictions": [
+          {
+            "Sum": 11,
+            "Frequency": 12.33,
+            "AverageInterval": 8.1,
+            "TimeSinceLastAppearance": 0,
+            "Probability": 1
+          }
+        ]
+      }
+    ],
+    "RemainingBalance": 1043900,
+    "TotalWinnings": 88000,
+    "PrizeWon": 44000
   }
 ]

@@ -1,6 +1,9 @@
 using OfficeOpenXml;
 using Bingo.ApiService.Services;
+using Bingo.ApiService.Data;
+using Bingo.ApiService.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Quartz;
 using Quartz.Impl;
 
@@ -24,7 +27,51 @@ public class Program
         // Add services to the container.
         builder.Services.AddProblemDetails();
         builder.Services.AddHttpClient();
+        
+        // Configure Entity Framework
+        builder.Services.AddDbContext<BingoDbContext>(options =>
+        {
+            var connectionString = builder.Configuration.GetConnectionString("BingoDb");
+            options.UseNpgsql(connectionString, npgsqlOptions =>
+            {
+                npgsqlOptions.MigrationsAssembly("Bingo.ApiService");
+                npgsqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+            });
+
+            var dbSettings = builder.Configuration.GetSection("DatabaseSettings");
+            if (dbSettings.GetValue<bool>("EnableSensitiveDataLogging"))
+            {
+                options.EnableSensitiveDataLogging();
+            }
+            
+            if (dbSettings.GetValue<bool>("EnableDetailedErrors"))
+            {
+                options.EnableDetailedErrors();
+            }
+            
+            var commandTimeout = dbSettings.GetValue<int>("CommandTimeout");
+            if (commandTimeout > 0)
+            {
+                options.ConfigureWarnings(warnings => warnings.Default(WarningBehavior.Throw));
+            }
+        });
+
+        // Add repository pattern
+        builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+        builder.Services.AddScoped<IGameRepository, GameRepository>();
+        builder.Services.AddScoped<IBetRepository, BetRepository>();
+        builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+        builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+        
+        // Add unit of work
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
+        // Add services
         builder.Services.AddScoped<IBingoService, BingoService>();
+        builder.Services.AddScoped<IGameService, GameService>();
+        builder.Services.AddScoped<IBettingService, BettingService>();
+        builder.Services.AddScoped<IPrizeCalculationService, PrizeCalculationService>();
+        builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
         // Add Quartz services
         builder.Services.AddQuartz(q =>
@@ -157,6 +204,154 @@ public class Program
             {
                 var results = await bingoService.GetLatestResultsAsync();
                 return Results.Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
+        // Database migration endpoint
+        app.MapPost("/api/database/migrate", async ([FromServices] BingoDbContext dbContext) =>
+        {
+            try
+            {
+                await dbContext.Database.MigrateAsync();
+                return Results.Ok(new { message = "Database migrated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem($"Migration failed: {ex.Message}");
+            }
+        });
+
+        // Game management endpoints
+        app.MapPost("/api/games", async ([FromServices] IGameService gameService, [FromBody] CreateGameRequest request) =>
+        {
+            try
+            {
+                var game = await gameService.CreateGameAsync(request);
+                return Results.Ok(game);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
+        app.MapGet("/api/games/{gameId}", async ([FromServices] IGameService gameService, Guid gameId) =>
+        {
+            try
+            {
+                var game = await gameService.GetGameAsync(gameId);
+                return game != null ? Results.Ok(game) : Results.NotFound();
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
+        app.MapPost("/api/games/{gameId}/draw", async ([FromServices] IGameService gameService, Guid gameId) =>
+        {
+            try
+            {
+                var result = await gameService.DrawNumbersAsync(gameId);
+                return Results.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
+        // Betting endpoints
+        app.MapPost("/api/bets", async ([FromServices] IBettingService bettingService, [FromBody] PlaceBetRequest request) =>
+        {
+            try
+            {
+                var bet = await bettingService.PlaceBetAsync(request);
+                return Results.Ok(bet);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
+        app.MapGet("/api/players/{playerId}/bets", async ([FromServices] IBettingService bettingService, Guid playerId, [FromQuery] int? limit = 50) =>
+        {
+            try
+            {
+                var bets = await bettingService.GetPlayerBetsAsync(playerId, limit ?? 50);
+                return Results.Ok(bets);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
+        // Player management endpoints
+        app.MapPost("/api/players", async ([FromServices] IPlayerRepository playerRepo, [FromBody] CreatePlayerRequest request) =>
+        {
+            try
+            {
+                var player = await playerRepo.CreateAsync(request);
+                return Results.Ok(player);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
+        app.MapGet("/api/players/{playerId}", async ([FromServices] IPlayerRepository playerRepo, Guid playerId) =>
+        {
+            try
+            {
+                var player = await playerRepo.GetByIdAsync(playerId);
+                return player != null ? Results.Ok(player) : Results.NotFound();
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
+        app.MapGet("/api/players/{playerId}/balance", async ([FromServices] IPlayerRepository playerRepo, Guid playerId) =>
+        {
+            try
+            {
+                var balance = await playerRepo.GetBalanceAsync(playerId);
+                return Results.Ok(new { playerId, balance });
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
+        // Statistics endpoints
+        app.MapGet("/api/statistics/number-frequency", async ([FromServices] IStatisticsService statsService, [FromQuery] int? days = 30) =>
+        {
+            try
+            {
+                var stats = await statsService.GetNumberFrequencyAsync(days ?? 30);
+                return Results.Ok(stats);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
+        });
+
+        app.MapGet("/api/statistics/player/{playerId}", async ([FromServices] IStatisticsService statsService, Guid playerId) =>
+        {
+            try
+            {
+                var stats = await statsService.GetPlayerStatisticsAsync(playerId);
+                return Results.Ok(stats);
             }
             catch (Exception ex)
             {
