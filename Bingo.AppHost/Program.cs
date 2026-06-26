@@ -1,10 +1,14 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var apiService = builder.AddProject<Projects.Bingo_ApiService>("apiservice");
+// PostgreSQL (chạy trong Docker) + database "BingoDb" + pgAdmin.
+var postgres = builder.AddPostgres("postgres")
+    .WithDataVolume()
+    .WithPgAdmin();
 
-builder.AddProject<Projects.Bingo_Web>("webfrontend")
-    .WithExternalHttpEndpoints()
-    .WithReference(apiService)
-    .WaitFor(apiService);
+var bingoDb = postgres.AddDatabase("BingoDb");
+
+builder.AddProject<Projects.Bingo_ApiService>("apiservice")
+    .WithReference(bingoDb)
+    .WaitFor(bingoDb);
 
 builder.Build().Run();
