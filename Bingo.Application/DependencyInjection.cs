@@ -32,6 +32,12 @@ public static class DependencyInjection
         services.AddSingleton<IBettingStrategy, StreakBreakStrategy>();
         services.AddSingleton<IBettingStrategy, MartingaleMidStrategy>();
         services.AddSingleton<IBettingStrategy, SmartMixStrategy>();
+        services.AddSingleton<IBettingStrategy, FibonacciStrategy>();
+        services.AddSingleton<IBettingStrategy, DAlembertStrategy>();
+        services.AddSingleton<IBettingStrategy, System1326Strategy>();
+        services.AddSingleton<IBettingStrategy, LabouchereStrategy>();
+        services.AddSingleton<IBettingStrategy, EnsembleVoteStrategy>();
+        services.AddSingleton<IBettingStrategy, KellyFractionStrategy>();
 
         services.AddSingleton<IStrategyRegistry, StrategyRegistry>();
 

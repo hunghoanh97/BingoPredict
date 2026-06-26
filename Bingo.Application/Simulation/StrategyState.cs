@@ -48,6 +48,10 @@ public sealed class StrategyState
         return arr;
     }
 
+    /// <summary>Đọc mảng đã lưu với độ dài bất kỳ (cho chuỗi Labouchère), null nếu chưa có.</summary>
+    public double[]? GetArrayOrNull(string key) =>
+        _data.TryGetValue(key, out var a) ? (double[])a.Clone() : null;
+
     public void SetArray(string key, double[] value)
     {
         _data[key] = value;

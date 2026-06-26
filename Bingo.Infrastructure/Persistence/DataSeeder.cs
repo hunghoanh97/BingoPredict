@@ -33,7 +33,13 @@ public static class DataSeeder
         new StrategySeed("sparse_tai", "Cược Tài cách kỳ", "Chỉ cược Lớn mỗi N kỳ (mặc định 3), bỏ qua các kỳ còn lại.", false, "{\"everyN\":3}"),
         new StrategySeed("streak_break", "Bẻ cầu chọn lọc", "Chỉ cược khi có chuỗi 3 kỳ cùng khoảng rồi cược ngược; còn lại bỏ qua.", false, "{\"streak\":3}"),
         new StrategySeed("martingale_mid", "Martingale 10/11", "Cược tổng 10&11, gấp đôi tiền cược mỗi lần thua, reset khi thắng (bắt đầu 10.000).", true, null),
-        new StrategySeed("smart_mix", "Mix quản lý vốn", "Cược cửa EV tốt nhất (Hòa) + chọn lọc + chốt lời/dừng lỗ theo ngày để giảm lỗ.", false, "{\"target\":\"Hoa\",\"takeProfit\":200000,\"stopLoss\":300000}")
+        new StrategySeed("smart_mix", "Mix quản lý vốn", "Cược cửa EV tốt nhất (Hòa) + chọn lọc + chốt lời/dừng lỗ theo ngày để giảm lỗ.", false, "{\"target\":\"Hoa\",\"takeProfit\":200000,\"stopLoss\":300000}"),
+        new StrategySeed("fibonacci", "Fibonacci", "Thua tiến 1 bước Fibonacci, thắng lùi 2 bước (cược Tài). Reset mỗi ngày.", true, null),
+        new StrategySeed("dalembert", "D'Alembert", "Thua +1 đơn vị, thắng −1 đơn vị (cược Tài, biến động thấp).", true, null),
+        new StrategySeed("system_1326", "Hệ 1-3-2-6", "Tiến trình thuận khi thắng 1-3-2-6 (cược Tài).", true, null),
+        new StrategySeed("labouchere", "Labouchère", "Cancellation: cược đầu+cuối chuỗi, thắng xóa 2 đầu, thua nối thêm (cược Tài).", true, null),
+        new StrategySeed("ensemble_vote", "Mix bỏ phiếu", "Tổng hợp 4 tín hiệu, chỉ cược khi đồng thuận ≥3/4, còn lại bỏ qua.", false, "{\"window\":100,\"threshold\":3}"),
+        new StrategySeed("kelly_frac", "Kelly phân số", "Cược 2% số dư vào cửa Hòa; thua thì cược tự co lại.", false, "{\"fraction\":0.02,\"target\":\"Hoa\"}")
     };
 
     private static readonly Dictionary<int, decimal> SumMultipliers = new()
