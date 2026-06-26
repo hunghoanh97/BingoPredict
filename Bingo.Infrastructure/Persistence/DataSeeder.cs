@@ -31,13 +31,29 @@ public static class DataSeeder
         new StrategySeed("markov_sum", "Markov", "Học ma trận chuyển tiếp tổng→tổng, cược tổng khả dĩ nhất.", true, null),
         new StrategySeed("ewma_adaptive", "EWMA thích nghi", "Trọng số mũ theo tổng, tự cập nhật mỗi kỳ.", true, "{\"alpha\":0.05}"),
         new StrategySeed("sparse_tai", "Cược Tài cách kỳ", "Chỉ cược Lớn mỗi N kỳ (mặc định 3), bỏ qua các kỳ còn lại.", false, "{\"everyN\":3}"),
-        new StrategySeed("streak_break", "Bẻ cầu chọn lọc", "Chỉ cược khi có chuỗi 3 kỳ cùng khoảng rồi cược ngược; còn lại bỏ qua.", false, "{\"streak\":3}")
+        new StrategySeed("streak_break", "Bẻ cầu chọn lọc", "Chỉ cược khi có chuỗi 3 kỳ cùng khoảng rồi cược ngược; còn lại bỏ qua.", false, "{\"streak\":3}"),
+        new StrategySeed("martingale_mid", "Martingale 10/11", "Cược tổng 10&11, gấp đôi tiền cược mỗi lần thua, reset khi thắng (bắt đầu 10.000).", true, null)
     };
 
     private static readonly Dictionary<int, decimal> SumMultipliers = new()
     {
         [3] = 120m, [4] = 40m, [5] = 20m, [6] = 12m, [7] = 8m, [8] = 5.5m, [9] = 4.7m, [10] = 4.4m,
         [11] = 4.4m, [12] = 4.7m, [13] = 5.5m, [14] = 8m, [15] = 12m, [16] = 20m, [17] = 40m, [18] = 120m
+    };
+
+    public sealed record VariantUserSeed(string Name, string StrategyKey, string ConfigJson);
+
+    // Các biến thể cấu hình để theo dõi song song trên leaderboard (cùng chiến lược, config khác nhau).
+    public static readonly IReadOnlyList<VariantUserSeed> VariantUsers = new[]
+    {
+        new VariantUserSeed("Var - Mart Tài (thắng nghỉ)", "martingale_size", "{\"stopOnWin\":true}"),
+        new VariantUserSeed("Var - Mart Tài (trần 1.28tr)", "martingale_size", "{\"maxStake\":1280000}"),
+        new VariantUserSeed("Var - Mart 11 (thắng nghỉ)", "martingale_mid", "{\"single\":true,\"stopOnWin\":true}"),
+        new VariantUserSeed("Var - Mart 11 (trần 320k)", "martingale_mid", "{\"single\":true,\"maxStake\":320000}"),
+        new VariantUserSeed("Var - Mart 10&11 (cách 3 kỳ)", "martingale_mid", "{\"everyN\":3}"),
+        new VariantUserSeed("Var - Mart 11 (cách 2, thắng nghỉ)", "martingale_mid", "{\"single\":true,\"everyN\":2,\"stopOnWin\":true}"),
+        new VariantUserSeed("Var - Sparse Tài (everyN 20)", "sparse_tai", "{\"everyN\":20}"),
+        new VariantUserSeed("Var - Bẻ cầu (streak 6)", "streak_break", "{\"streak\":6}")
     };
 
     public static async Task SeedAsync(BingoDbContext ctx, CancellationToken ct = default)
@@ -90,6 +106,23 @@ public static class DataSeeder
                 ConfigJson = null,
                 Enabled = true,
                 CreatedAt = now
+            }));
+            await ctx.SaveChangesAsync(ct);
+        }
+
+        // Idempotent: thêm các user biến thể (theo Name) để theo dõi song song.
+        var existingNames = await ctx.SimUsers.Select(u => u.Name).ToListAsync(ct);
+        var newVariants = VariantUsers.Where(v => !existingNames.Contains(v.Name)).ToList();
+        if (newVariants.Count > 0)
+        {
+            var now2 = DateTime.UtcNow;
+            ctx.SimUsers.AddRange(newVariants.Select(v => new SimUser
+            {
+                Name = v.Name,
+                StrategyKey = v.StrategyKey,
+                ConfigJson = v.ConfigJson,
+                Enabled = true,
+                CreatedAt = now2
             }));
             await ctx.SaveChangesAsync(ct);
         }

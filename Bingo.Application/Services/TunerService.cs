@@ -39,6 +39,11 @@ public sealed class TunerService : ITunerService
         "paroli_size" => new[] { "{\"side\":\"Lon\"}", "{\"side\":\"Nho\"}" },
         "sparse_tai" => new[] { "{\"everyN\":3}", "{\"everyN\":5}", "{\"everyN\":8}", "{\"everyN\":12}", "{\"everyN\":20}" },
         "streak_break" => new[] { "{\"streak\":3}", "{\"streak\":4}", "{\"streak\":5}", "{\"streak\":6}" },
+        "martingale_mid" => new[]
+        {
+            "{}", "{\"everyN\":2}", "{\"single\":true}",
+            "{\"stopOnWin\":true}", "{\"stopOnWin\":true,\"everyN\":2}", "{\"stopOnWin\":true,\"single\":true}"
+        },
         _ => Array.Empty<string>()
     };
 

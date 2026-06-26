@@ -13,6 +13,14 @@ public sealed class MartingaleSizeStrategy : StrategyBase
 
     public override IReadOnlyList<BetDecision> DecideBets(StrategyContext ctx)
     {
+        if (ctx.Balance >= GameConstants.DailyBudget)
+        {
+            ctx.State.SetScalar("stake", (double)GameConstants.TicketPrice);
+            ctx.State.SetScalar("won", 0);
+        }
+        if (ctx.Config.GetBool("stopOnWin", false) && ctx.State.GetScalar("won", 0) >= 1)
+            return Array.Empty<BetDecision>();
+
         var side = ctx.Config.GetString("side", nameof(SizeResult.Lon));
         var stake = (decimal)ctx.State.GetScalar("stake", (double)GameConstants.TicketPrice);
         if (stake < GameConstants.TicketPrice) stake = GameConstants.TicketPrice;
@@ -25,8 +33,8 @@ public sealed class MartingaleSizeStrategy : StrategyBase
         var anyWin = settledTickets.Any(t => t.IsWin);
         var cur = (decimal)state.GetScalar("stake", (double)GameConstants.TicketPrice);
         var maxStake = (decimal)config.GetDouble("maxStake", (double)GameConstants.DailyBudget);
-        var next = anyWin ? GameConstants.TicketPrice : Math.Min(cur * 2m, maxStake);
-        state.SetScalar("stake", (double)next);
+        state.SetScalar("stake", (double)(anyWin ? GameConstants.TicketPrice : Math.Min(cur * 2m, maxStake)));
+        if (anyWin) state.SetScalar("won", 1);
     }
 }
 
@@ -40,6 +48,7 @@ public sealed class ParoliSizeStrategy : StrategyBase
     {
         var side = ctx.Config.GetString("side", nameof(SizeResult.Lon));
         var stake = (decimal)ctx.State.GetScalar("stake", (double)GameConstants.TicketPrice);
+        if (ctx.Balance >= GameConstants.DailyBudget) { stake = GameConstants.TicketPrice; ctx.State.SetScalar("stake", (double)stake); }
         if (stake < GameConstants.TicketPrice) stake = GameConstants.TicketPrice;
         return new[] { new BetDecision(BetKind.Size, side, stake) };
     }
