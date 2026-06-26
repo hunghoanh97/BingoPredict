@@ -28,6 +28,8 @@ public static class DependencyInjection
         services.AddSingleton<IBettingStrategy, HedgeJackpotStrategy>();
         services.AddSingleton<IBettingStrategy, RandomBaselineStrategy>();
         services.AddSingleton<IBettingStrategy, NumberHunterStrategy>();
+        services.AddSingleton<IBettingStrategy, SparseTaiStrategy>();
+        services.AddSingleton<IBettingStrategy, StreakBreakStrategy>();
 
         services.AddSingleton<IStrategyRegistry, StrategyRegistry>();
 

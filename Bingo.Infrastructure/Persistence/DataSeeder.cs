@@ -29,7 +29,9 @@ public static class DataSeeder
         new StrategySeed("martingale_size", "Martingale (gấp đôi khi thua)", "Cược Tài, thua thì gấp đôi mức cược, thắng reset.", true, "{\"side\":\"Lon\"}"),
         new StrategySeed("paroli_size", "Paroli (gấp đôi khi thắng)", "Cược Tài, thắng thì gấp đôi mức cược, thua reset.", true, "{\"side\":\"Lon\"}"),
         new StrategySeed("markov_sum", "Markov", "Học ma trận chuyển tiếp tổng→tổng, cược tổng khả dĩ nhất.", true, null),
-        new StrategySeed("ewma_adaptive", "EWMA thích nghi", "Trọng số mũ theo tổng, tự cập nhật mỗi kỳ.", true, "{\"alpha\":0.05}")
+        new StrategySeed("ewma_adaptive", "EWMA thích nghi", "Trọng số mũ theo tổng, tự cập nhật mỗi kỳ.", true, "{\"alpha\":0.05}"),
+        new StrategySeed("sparse_tai", "Cược Tài cách kỳ", "Chỉ cược Lớn mỗi N kỳ (mặc định 3), bỏ qua các kỳ còn lại.", false, "{\"everyN\":3}"),
+        new StrategySeed("streak_break", "Bẻ cầu chọn lọc", "Chỉ cược khi có chuỗi 3 kỳ cùng khoảng rồi cược ngược; còn lại bỏ qua.", false, "{\"streak\":3}")
     };
 
     private static readonly Dictionary<int, decimal> SumMultipliers = new()
@@ -40,9 +42,12 @@ public static class DataSeeder
 
     public static async Task SeedAsync(BingoDbContext ctx, CancellationToken ct = default)
     {
-        if (!await ctx.Strategies.AnyAsync(ct))
+        // Idempotent: thêm các chiến lược còn thiếu (cho phép bổ sung chiến lược mới mà không cần reset).
+        var existingKeys = await ctx.Strategies.Select(s => s.Key).ToListAsync(ct);
+        var missing = Strategies.Where(s => !existingKeys.Contains(s.Key)).ToList();
+        if (missing.Count > 0)
         {
-            ctx.Strategies.AddRange(Strategies.Select(s => new Strategy
+            ctx.Strategies.AddRange(missing.Select(s => new Strategy
             {
                 Key = s.Key, Name = s.Name, Description = s.Description,
                 IsAdaptive = s.IsAdaptive, DefaultParamsJson = s.Params, Enabled = true
@@ -71,12 +76,16 @@ public static class DataSeeder
             await ctx.SaveChangesAsync(ct);
         }
 
-        if (!await ctx.SimUsers.AnyAsync(ct))
+        // Idempotent: tạo user cho mỗi chiến lược chưa có user (mỗi user một chiến lược riêng).
+        var usedKeys = await ctx.SimUsers.Select(u => u.StrategyKey).ToListAsync(ct);
+        var newUserStrategies = Strategies.Where(s => !usedKeys.Contains(s.Key)).ToList();
+        if (newUserStrategies.Count > 0)
         {
             var now = DateTime.UtcNow;
-            ctx.SimUsers.AddRange(Strategies.Select((s, i) => new SimUser
+            var startIndex = usedKeys.Count;
+            ctx.SimUsers.AddRange(newUserStrategies.Select((s, i) => new SimUser
             {
-                Name = $"Bot {i + 1:00} - {s.Name}",
+                Name = $"Bot {startIndex + i + 1:00} - {s.Name}",
                 StrategyKey = s.Key,
                 ConfigJson = null,
                 Enabled = true,
