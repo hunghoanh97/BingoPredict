@@ -37,7 +37,16 @@ public sealed class TunerService : ITunerService
         },
         "martingale_size" => new[] { "{\"side\":\"Lon\"}", "{\"side\":\"Nho\"}" },
         "paroli_size" => new[] { "{\"side\":\"Lon\"}", "{\"side\":\"Nho\"}" },
+        "sparse_tai" => new[] { "{\"everyN\":3}", "{\"everyN\":5}", "{\"everyN\":8}", "{\"everyN\":12}", "{\"everyN\":20}" },
+        "streak_break" => new[] { "{\"streak\":3}", "{\"streak\":4}", "{\"streak\":5}", "{\"streak\":6}" },
         _ => Array.Empty<string>()
+    };
+
+    private static decimal Score(string metric, BacktestMetrics m) => metric?.ToLowerInvariant() switch
+    {
+        "winrate" => m.WinRate,
+        "net" => m.NetProfit, // lợi nhuận tuyệt đối — ưu tiên giảm lỗ (vd chọn nhịp bỏ kỳ tối ưu)
+        _ => m.Roi
     };
 
     public async Task<TuneResult> OptimizeAsync(string metric = "roi", int maxDraws = 2000, CancellationToken ct = default)
@@ -51,7 +60,6 @@ public sealed class TunerService : ITunerService
             .ToDictionary(r => (r.BetKind, r.BetValue), r => r.Multiplier);
         var strategies = (await _uow.Strategies.GetAllAsync()).ToDictionary(s => s.Key, StringComparer.OrdinalIgnoreCase);
         var users = await _uow.SimUsers.GetAllAsync();
-        var byRoi = !string.Equals(metric, "winrate", StringComparison.OrdinalIgnoreCase);
 
         int tuned = 0;
         var detail = new System.Text.StringBuilder();
@@ -70,7 +78,7 @@ public sealed class TunerService : ITunerService
             {
                 var config = StrategyConfig.Parse(stratEntity?.DefaultParamsJson, candJson);
                 var m = BacktestRunner.Run(strat, config, drawsAsc, multipliers, _model, user.Id == 0 ? 1 : user.Id);
-                var score = byRoi ? m.Roi : m.WinRate;
+                var score = Score(metric, m);
                 if (score > bestScore) { bestScore = score; bestJson = candJson; }
             }
 
@@ -97,7 +105,6 @@ public sealed class TunerService : ITunerService
         var multipliers = (await _uow.PrizeRules.GetAllAsync())
             .ToDictionary(r => (r.BetKind, r.BetValue), r => r.Multiplier);
         var strategies = (await _uow.Strategies.GetAllAsync()).ToDictionary(s => s.Key, StringComparer.OrdinalIgnoreCase);
-        var byRoi = !string.Equals(metric, "winrate", StringComparison.OrdinalIgnoreCase);
 
         var results = new List<StrategyDiscoveryDto>();
         foreach (var strat in _registry.All)
@@ -115,7 +122,7 @@ public sealed class TunerService : ITunerService
             {
                 var config = StrategyConfig.Parse(stratEntity?.DefaultParamsJson, cand);
                 var m = BacktestRunner.Run(strat, config, drawsAsc, multipliers, _model, 12345);
-                var score = byRoi ? m.Roi : m.WinRate;
+                var score = Score(metric, m);
                 if (score > bestScore) { bestScore = score; best = m; bestConfig = cand ?? (stratEntity?.DefaultParamsJson ?? "{}"); }
             }
 
@@ -124,8 +131,11 @@ public sealed class TunerService : ITunerService
                 best.Tickets, best.WinRate, best.Staked, best.Payout, best.NetProfit, best.Roi));
         }
 
-        return byRoi
-            ? results.OrderByDescending(r => r.Roi).ToList()
-            : results.OrderByDescending(r => r.WinRate).ToList();
+        return (metric?.ToLowerInvariant()) switch
+        {
+            "winrate" => results.OrderByDescending(r => r.WinRate).ToList(),
+            "net" => results.OrderByDescending(r => r.NetProfit).ToList(),
+            _ => results.OrderByDescending(r => r.Roi).ToList()
+        };
     }
 }
