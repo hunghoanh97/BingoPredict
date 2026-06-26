@@ -32,7 +32,8 @@ public static class DataSeeder
         new StrategySeed("ewma_adaptive", "EWMA thích nghi", "Trọng số mũ theo tổng, tự cập nhật mỗi kỳ.", true, "{\"alpha\":0.05}"),
         new StrategySeed("sparse_tai", "Cược Tài cách kỳ", "Chỉ cược Lớn mỗi N kỳ (mặc định 3), bỏ qua các kỳ còn lại.", false, "{\"everyN\":3}"),
         new StrategySeed("streak_break", "Bẻ cầu chọn lọc", "Chỉ cược khi có chuỗi 3 kỳ cùng khoảng rồi cược ngược; còn lại bỏ qua.", false, "{\"streak\":3}"),
-        new StrategySeed("martingale_mid", "Martingale 10/11", "Cược tổng 10&11, gấp đôi tiền cược mỗi lần thua, reset khi thắng (bắt đầu 10.000).", true, null)
+        new StrategySeed("martingale_mid", "Martingale 10/11", "Cược tổng 10&11, gấp đôi tiền cược mỗi lần thua, reset khi thắng (bắt đầu 10.000).", true, null),
+        new StrategySeed("smart_mix", "Mix quản lý vốn", "Cược cửa EV tốt nhất (Hòa) + chọn lọc + chốt lời/dừng lỗ theo ngày để giảm lỗ.", false, "{\"target\":\"Hoa\",\"takeProfit\":200000,\"stopLoss\":300000}")
     };
 
     private static readonly Dictionary<int, decimal> SumMultipliers = new()
@@ -53,7 +54,11 @@ public static class DataSeeder
         new VariantUserSeed("Var - Mart 10&11 (cách 3 kỳ)", "martingale_mid", "{\"everyN\":3}"),
         new VariantUserSeed("Var - Mart 11 (cách 2, thắng nghỉ)", "martingale_mid", "{\"single\":true,\"everyN\":2,\"stopOnWin\":true}"),
         new VariantUserSeed("Var - Sparse Tài (everyN 20)", "sparse_tai", "{\"everyN\":20}"),
-        new VariantUserSeed("Var - Bẻ cầu (streak 6)", "streak_break", "{\"streak\":6}")
+        new VariantUserSeed("Var - Bẻ cầu (streak 6)", "streak_break", "{\"streak\":6}"),
+        new VariantUserSeed("Mix - Hòa + TP/SL", "smart_mix", "{\"target\":\"Hoa\",\"takeProfit\":200000,\"stopLoss\":300000}"),
+        new VariantUserSeed("Mix - Hòa cách 3 + TP/SL", "smart_mix", "{\"target\":\"Hoa\",\"everyN\":3,\"takeProfit\":150000,\"stopLoss\":200000}"),
+        new VariantUserSeed("Mix - 10&11 + TP/SL", "smart_mix", "{\"target\":\"mid\",\"takeProfit\":300000,\"stopLoss\":400000}"),
+        new VariantUserSeed("Mix - Hòa TP nhỏ/SL chặt", "smart_mix", "{\"target\":\"Hoa\",\"takeProfit\":100000,\"stopLoss\":150000}")
     };
 
     public static async Task SeedAsync(BingoDbContext ctx, CancellationToken ct = default)

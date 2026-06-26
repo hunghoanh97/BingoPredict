@@ -31,6 +31,7 @@ public static class DependencyInjection
         services.AddSingleton<IBettingStrategy, SparseTaiStrategy>();
         services.AddSingleton<IBettingStrategy, StreakBreakStrategy>();
         services.AddSingleton<IBettingStrategy, MartingaleMidStrategy>();
+        services.AddSingleton<IBettingStrategy, SmartMixStrategy>();
 
         services.AddSingleton<IStrategyRegistry, StrategyRegistry>();
 
